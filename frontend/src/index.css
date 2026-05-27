@@ -1,0 +1,404 @@
+/* frontend/src/index.css */
+
+/* ─── Core Tailwind v4 import ──────────────────────────────
+   In v4, this single line replaces all three @tailwind directives.
+   It imports base styles, component utilities, AND utility classes.
+──────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+
+/* ─── Design Tokens ────────────────────────────────────────
+   @theme is Tailwind v4's replacement for tailwind.config.js theme extension.
+   
+   HOW IT WORKS:
+   - You define variables here in @theme {}
+   - Tailwind AUTOMATICALLY generates utility classes from them
+   - --color-brand-500 → you can use bg-brand-500, text-brand-500, border-brand-500
+   - --spacing-18 → you can use p-18, m-18, gap-18, w-18, h-18
+   - --font-sans → font-sans class uses this value
+   
+   This is your single source of truth for all design decisions.
+──────────────────────────────────────────────────────────── */
+@theme {
+
+  /* ── Fonts ── */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── Brand / Primary color scale ──
+     Usage: bg-brand-500, text-brand-300, border-brand-700
+  */
+  --color-brand-50:  #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+
+  /* ── Surface colors (dark background layers / elevation system) ──
+     Think of these as layers of elevation, like layers of glass stacked:
+     surface-0 = deepest/darkest (page background)
+     surface-4 = lightest (floating elements like tooltips)
+     
+     Usage: bg-surface-0, bg-surface-2
+  */
+  --color-surface-0: #080c14;
+  --color-surface-1: #0d1117;
+  --color-surface-2: #111827;
+  --color-surface-3: #161b27;
+  --color-surface-4: #1c2333;
+  --color-surface-5: #232d3f;
+
+  /* ── Content / text colors ──
+     Usage: text-content-primary, text-content-muted
+  */
+  --color-content-primary:   #f1f5f9;
+  --color-content-secondary: #94a3b8;
+  --color-content-muted:     #64748b;
+  --color-content-disabled:  #334155;
+  --color-content-link:      #60a5fa;
+  --color-content-inverse:   #0d1117;
+
+  /* ── Border colors ──
+     Usage: border-border-default, border-border-strong
+  */
+  --color-border-subtle:  rgba(255, 255, 255, 0.04);
+  --color-border-default: rgba(255, 255, 255, 0.07);
+  --color-border-strong:  rgba(255, 255, 255, 0.13);
+  --color-border-focus:   rgba(59, 130, 246, 0.55);
+
+  /* ── Semantic status colors ──
+     Usage: text-status-success, bg-status-error/10
+  */
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-error:   #ef4444;
+  --color-status-info:    #3b82f6;
+
+  /* ── Accent colors for stat cards, badges, etc. ──
+     Usage: text-accent-green, bg-accent-purple/10
+  */
+  --color-accent-blue:   #3b82f6;
+  --color-accent-green:  #10b981;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-amber:  #f59e0b;
+  --color-accent-red:    #ef4444;
+  --color-accent-cyan:   #06b6d4;
+  --color-accent-pink:   #ec4899;
+
+  /* ── Custom spacing ──
+     Usage: p-18, m-22, gap-15
+  */
+  --spacing-15: 3.75rem;
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+
+  /* ── Border radius scale ──
+     Usage: rounded-card, rounded-button, rounded-badge
+  */
+  --radius-button: 0.5rem;    /* 8px  */
+  --radius-input:  0.5rem;    /* 8px  */
+  --radius-card:   0.75rem;   /* 12px */
+  --radius-modal:  1rem;      /* 16px */
+  --radius-badge:  0.375rem;  /* 6px  */
+  --radius-pill:   9999px;
+
+  /* ── Animation durations ──
+     Usage: duration-fast, duration-normal
+  */
+  --default-transition-duration: 150ms;
+}
+
+/* ─── Base Layer ────────────────────────────────────────────
+   Global resets and element defaults.
+   In v4, use @layer base for element-level overrides.
+──────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* Inherit border color so border-* utilities work predictably */
+    border-color: var(--color-border-default);
+  }
+
+  html {
+    /* Prevents layout shift from scrollbar appearing/disappearing */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-surface-1);
+    color: var(--color-content-secondary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-content-primary);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    color: var(--color-content-link);
+    text-decoration: none;
+  }
+
+  /* Custom scrollbar — consistent across the app */
+  ::-webkit-scrollbar       { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--color-surface-2); }
+  ::-webkit-scrollbar-thumb { background: var(--color-surface-5); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-content-muted); }
+}
+
+/* ─── Component Layer ───────────────────────────────────────
+   Named CSS classes for UI patterns that repeat 5+ times.
+   
+   RULE: Only add something here when:
+   1. You see yourself typing the same 4+ utility combination repeatedly
+   2. It represents a real, named UI concept (not just "makes it look nice")
+   
+   DO NOT put one-off layout styles here.
+   DO NOT put page-specific styles here — those stay as utilities in JSX.
+──────────────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Card ── */
+  .card {
+    background-color: var(--color-surface-3);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-card);
+  }
+
+  .card-interactive {
+    background-color: var(--color-surface-3);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-card);
+    transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease;
+    cursor: pointer;
+  }
+  .card-interactive:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface-4);
+    transform: translateY(-1px);
+  }
+
+  /* ── Page layout ── */
+  .page-container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .section-label {
+    font-size: 0.6875rem;   /* 11px */
+    font-weight: 600;
+    color: var(--color-content-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── Input base ── */
+  .input-base {
+    width: 100%;
+    background-color: var(--color-surface-4);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-input);
+    padding: 0.625rem 1rem;    /* 10px 16px */
+    font-size: 0.875rem;
+    color: var(--color-content-primary);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+    outline: none;
+  }
+  .input-base::placeholder {
+    color: var(--color-content-disabled);
+  }
+  .input-base:focus {
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  }
+  .input-error {
+    border-color: rgba(239, 68, 68, 0.5) !important;
+  }
+  .input-error:focus {
+    border-color: var(--color-status-error) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+  }
+
+  /* ── Button base ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    border-radius: var(--radius-button);
+    border: 1px solid transparent;
+    transition: all 150ms ease;
+    cursor: pointer;
+    outline: none;
+    white-space: nowrap;
+    font-family: var(--font-sans);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .btn:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-surface-1), 0 0 0 4px var(--color-brand-500);
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  /* Button size variants */
+  .btn-xs  { font-size: 0.6875rem; padding: 0.25rem 0.625rem; }
+  .btn-sm  { font-size: 0.8125rem; padding: 0.375rem 0.875rem; }
+  .btn-md  { font-size: 0.875rem;  padding: 0.625rem 1.25rem;  }
+  .btn-lg  { font-size: 1rem;      padding: 0.75rem 1.5rem;    }
+  .btn-icon-sm { padding: 0.375rem; }
+  .btn-icon-md { padding: 0.5rem;  }
+
+  /* Button color variants */
+  .btn-primary {
+    background-color: var(--color-brand-600);
+    color: #ffffff;
+    border-color: var(--color-brand-600);
+  }
+  .btn-primary:hover:not(:disabled) { background-color: var(--color-brand-700); border-color: var(--color-brand-700); }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-content-secondary);
+    border-color: var(--color-border-strong);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    color: var(--color-content-primary);
+    background-color: var(--color-surface-4);
+    border-color: var(--color-border-strong);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--color-content-muted);
+    border-color: transparent;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    color: var(--color-content-primary);
+    background-color: var(--color-surface-4);
+  }
+
+  .btn-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background-color: rgba(239, 68, 68, 0.18);
+    border-color: rgba(239, 68, 68, 0.4);
+  }
+
+  .btn-full { width: 100%; }
+
+  /* ── Badge ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.1875rem 0.5rem;   /* 3px 8px */
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: var(--radius-badge);
+    border: 1px solid transparent;
+  }
+  .badge-blue   { background: rgba(59,130,246,0.12);  color: #60a5fa; border-color: rgba(59,130,246,0.2);  }
+  .badge-green  { background: rgba(16,185,129,0.12);  color: #34d399; border-color: rgba(16,185,129,0.2);  }
+  .badge-amber  { background: rgba(245,158,11,0.12);  color: #fbbf24; border-color: rgba(245,158,11,0.2);  }
+  .badge-red    { background: rgba(239,68,68,0.12);   color: #f87171; border-color: rgba(239,68,68,0.2);   }
+  .badge-purple { background: rgba(139,92,246,0.12);  color: #a78bfa; border-color: rgba(139,92,246,0.2);  }
+  .badge-gray   { background: rgba(100,116,139,0.12); color: #94a3b8; border-color: rgba(100,116,139,0.2); }
+
+  /* ── Stat card accent top border ── */
+  .stat-card-blue::before   { background: linear-gradient(90deg, #3b82f6, transparent); }
+  .stat-card-green::before  { background: linear-gradient(90deg, #10b981, transparent); }
+  .stat-card-purple::before { background: linear-gradient(90deg, #8b5cf6, transparent); }
+  .stat-card-amber::before  { background: linear-gradient(90deg, #f59e0b, transparent); }
+
+  /* ── Skeleton loading animation ── */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface-3) 25%,
+      var(--color-surface-4) 50%,
+      var(--color-surface-3) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  /* ── Focus ring ── */
+  .focus-ring:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-surface-1), 0 0 0 4px var(--color-brand-500);
+  }
+}
+
+/* ─── Utility Layer ─────────────────────────────────────────
+   One-off utilities not in Tailwind's default set.
+──────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Text balance — prevents awkward headline wrapping */
+  .text-balance { text-wrap: balance; }
+
+  /* Hide scrollbar but keep scroll functionality */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Gradient text — for hero headings */
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #60a5fa, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out both;
+  }
+  .animate-slide-up {
+    animation: slide-up 0.25s ease-out both;
+  }
+  .animate-scale-in {
+    animation: scale-in 0.15s ease-out both;
+  }
+}
+
+/* ─── Keyframes ─────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
