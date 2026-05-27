@@ -461,3 +461,8 @@ If you found this project useful:
 ---
 
 ## Made with ❤️ by Sakthivel R S
+![React](https://img.shields.io/badge/React-18-blue)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-3-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![OpenAI](https://img.shields.io/badge/OpenAI-AI-purple)
+![License](https://img.shields.io/badge/License-MIT-yellow)
